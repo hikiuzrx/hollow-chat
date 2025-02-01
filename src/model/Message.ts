@@ -13,3 +13,4 @@ const messageSchema = new mongoose.Schema({
     room:{type:mongoose.Schema.Types.ObjectId,ref:"Room"}
 }, {timestamps : true })
 const Message = mongoose.model<IMessage>('message',messageSchema)
+export default Message
