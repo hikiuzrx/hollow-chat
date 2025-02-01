@@ -1,21 +1,35 @@
-import express,{ Express,Request,Response } from "express";
+import express, { Express } from "express";
 import cookieParser from "cookie-parser";
-import cors from 'cors'
+import cors from "cors";
 import { configDotenv } from "dotenv";
 import mongoose from "mongoose";
-import http from 'http'
-import { setUpWebSocketServer } from "./websoeckts";
-import { NotFoundException,UnauthorizedException,ValidationException,ConflictException } from "./config/exceptions";
+import http from "http";
+import { setUpWebSocketServer } from "./websoeckts" // Fix import path
+import globalErrorHandler from "./middlewares/errorHandler";
 
-configDotenv()
-const api :Express = express()
-const server = http.createServer(api)
-console.log(process.env.DB_CONNECTION_STRING)
-mongoose.connect(process.env.DB_CONNECTION_STRING as string ,{dbName:"chat-app",timeoutMS:3000}).then(()=>{
-    api.listen(process.env.PORT || 8000 ,()=> console.log("hello it's connected to db & working  on this port = "+ process.env.PORT))
-})
-api.use(express.json())
-api.use(cookieParser())// src/types/global.d.ts
+configDotenv();
 
-api.get('/',()=> console.log('working'))
-setUpWebSocketServer(server) 
+const api: Express = express();
+const server = http.createServer(api); // Create HTTP server
+
+// Middleware
+api.use(express.json());
+api.use(cookieParser());
+api.use(cors());
+
+
+api.get("/", (_, res) => res.send("Server is running"));
+
+// Connect to MongoDB
+mongoose
+    .connect(process.env.DB_CONNECTION_STRING as string, { dbName: "chat-app", serverSelectionTimeoutMS: 3000 })
+    .then(() => {
+        server.listen(process.env.PORT || 8000, () => {
+            console.log("Connected to DB & running on port:", process.env.PORT || 8000);
+        });
+    })
+    .catch((err) => console.error("Database connection error:", err));
+
+// Initialize WebSocket server
+setUpWebSocketServer(server);
+api.use(globalErrorHandler);

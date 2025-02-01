@@ -1,6 +1,6 @@
 class BaseException extends Error {
     public statusCode: number;
-    private resource: string;
+    public resource: string;
   
     
     constructor(message: string, resource: string, statusCode: number) {
