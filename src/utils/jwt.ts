@@ -18,13 +18,7 @@ export { generateAccessToken, generateRefreshToken };
 export const verifyToken = (token: string, secret: string): string | jwt.JwtPayload => {
     return jwt.verify(token, secret);
 }
-export const decodeToken = (token: string,secret :string): jwt.JwtPayload => {
-    const decoded = jwt.verify(token,secret) as jwt.JwtPayload;
-    if (!decoded) {
-        throw new UnauthorizedException('Unvalid token',"auth");
-    }
-    return decoded;
-}
+
 export const getAccessToken = (req: any): string => {
     const authHeader = req.headers['authorization'];
     return authHeader && authHeader.split(' ')[1];

@@ -1,5 +1,6 @@
 import express, { Router } from "express";
-import { login, register, logout } from "../controllers/auth.controller";
+import { login, register, logout, updateProfile } from "../controllers/auth.controller";
+import isAuthenticated from "../middlewares/isAuthenticated";
 const router: Router = express.Router();
 
 /**
@@ -77,5 +78,7 @@ router.post("/register", register);
  *         description: Successful logout
  */
 router.post("/logout", logout);
+
+router.patch("/update-profile",isAuthenticated,updateProfile)
 
 export default router;

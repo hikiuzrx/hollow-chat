@@ -1,8 +1,16 @@
 import mongoose,{ Document ,ObjectId,Model} from "mongoose";
-import { userSchema } from "../utils/DTOs";
+import { Request } from "express";
+import { userSchema,updateUserSchema } from "../utils/DTOs";
 import z from "zod"
+
+export interface AuthenticatedRequest extends Request {
+    user?: IUser;
+}
+export type UpdateUserDTO = z.infer< typeof updateUserSchema>
 export type UserDTO = z.infer<typeof userSchema>;
+
 export type PublicUser = Omit<UserDTO,"password">
+
 export enum RoomType {
     DM = "DM",
     GROUPE_CHAT = "GROUPE CHAT"
@@ -24,6 +32,7 @@ export interface IUser extends Document{
     email:string,
     fullName:string,
     username:string,
-    password:string
+    password:string,
+    profilePic:string
 }
 export type Id = ObjectId;

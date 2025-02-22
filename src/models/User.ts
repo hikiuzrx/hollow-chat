@@ -6,19 +6,27 @@ const userSchema = new mongoose.Schema({
     fullname:{
         type:String,
         required:true,
+        unique:true
     },
     username:{
         type:String,
         required :true,
-        lowercase:true
+        lowercase:true,
+        unique:true
     },
     email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     password:{
         type:String,
         required:true
+    },
+    profilePic:{
+        type:String,
+        required:false,
+        default :""
     }
 })
 userSchema.pre('save',async function (next){
