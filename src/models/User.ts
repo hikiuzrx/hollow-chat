@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import { IUser } from "../types/types";
+import { IUser, IUserModel } from "../types/types";
+import z from "zod"
 const userSchema = new mongoose.Schema({
     fullname:{
         type:String,
@@ -26,16 +27,25 @@ userSchema.pre('save',async function (next){
     next()
 })
 userSchema.statics.login =async function(identifier:string,password:string){
-    const user =await this.findOne({identifier})
-    if(!user){
-        throw new Error("no user with this identifier is found")
-    }else {
+    const result  = z.string().email().safeParse(identifier)
+    let user
+    if(!result.success){
+         user = await this.findOne({username:identifier})
+        if(!user){
+            throw new NotFoundException("no user with this identifier is found","User")
+        }
+    }else{
+         user =await this.findOne({ email :identifier})
+        if(!user){
+            throw new NotFoundException("no user with this identifier is found","User")
+        }
+    }
         const auth = await bcrypt.compare(password,user.password)
         if(!auth){
-            throw new Error("wrong passowrd user unauthorized")
+            throw new UnauthorizedException("wrong passowrd user unauthorized","User")
         }
         return user
-    }
+    
 }
-const User = mongoose.model<IUser>('user',userSchema)
+const User = mongoose.model<IUser , IUserModel>('user',userSchema)
 export default User 
