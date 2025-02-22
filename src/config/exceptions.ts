@@ -37,4 +37,16 @@ class ConflictException extends BaseException {
       super(message, resource, 400); 
     }
   }
-  export {BaseException,NotFoundException,ValidationException,UnauthorizedException,ConflictException}
+class InternalServerException extends BaseException {
+    constructor(resource: string) {
+        super("internal Server Exception", resource, 500);
+    }
+}
+global.InternalServerException = InternalServerException;
+global.BaseException = BaseException;
+global.NotFoundException = NotFoundException;
+global.ValidationException = ValidationException;
+global.UnauthorizedException = UnauthorizedException;
+global.ConflictException = ConflictException;
+
+export { BaseException, NotFoundException, ValidationException, UnauthorizedException, ConflictException }

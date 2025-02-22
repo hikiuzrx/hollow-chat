@@ -1,7 +1,10 @@
-import { ValidationException,UnauthorizedException,ConflictException,NotFoundException } from "../config/exceptions";
+import { BaseException, NotFoundException, ValidationException, UnauthorizedException, ConflictException } from './config/exceptions';
+
 declare global {
-    let ValidationException:typeof ValidationException
-    let NotFoundException:typeof NotFoundException
-    let ConflictException:typeof ConflictException
-    let UnauthorizedException:typeof UnauthorizedException
+  var BaseException: typeof BaseException;
+  var NotFoundException: typeof NotFoundException;
+  var ValidationException: typeof ValidationException;
+  var UnauthorizedException: typeof UnauthorizedException;
+  var ConflictException: typeof ConflictException;
+  var InternalServerException: typeof InternalServerException
 }
